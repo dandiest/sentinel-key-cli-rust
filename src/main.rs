@@ -27,18 +27,18 @@ fn main() {
 
     let file_path = "vault.json";
 
-    let mut database: Vec<CredentialVault> = match fs::read_to_string(file_path) {
+    let mut database: Vec<CredentialVault> = match fs::read_to_string(file_path) {  
         Ok(content) => {
             println!("Database found. Loading...");
             serde_json::from_str(&content).expect("Error during JSON parsing")
         }
         Err(_) => {
             println!("Database not found. Creating new caveau...");
-            Vec::new()
+            Vec::new() 
         }
     };
 
-    if database.is_empty() {
+    if database.is_empty() {           // If the database is empty, creates a new service
         let first_service = CredentialVault {
             id: 1,
             service_name: "Main server".to_string(),
@@ -48,12 +48,12 @@ fn main() {
             },
             access_history: Vec::new(),
         };
-        database.push(first_service);
+        database.push(first_service);     
     };
 
-    if let Some(service) = database.get_mut(0) {
-        let new_event = AccessEvent {
-            timestamp: Utc::now(),
+    if let Some(service) = database.get_mut(0) { 
+        let new_event = AccessEvent {  
+            timestamp: Utc::now(),                   
             success: true,
         };
 
@@ -61,10 +61,10 @@ fn main() {
         service.access_history.push(new_event);
     }
 
-    let json_data = serde_json::to_string_pretty(&database)
+    let json_data = serde_json::to_string_pretty(&database)          // Serialization
     .expect("Error during serialization");
 
-    fs::write(file_path, json_data)
+    fs::write(file_path, json_data)                                  // Writing file on disk
     .expect("Error during file writing.");
 
     println!("Database updated and saved successfully!");
